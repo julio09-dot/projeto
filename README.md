@@ -1,252 +1,147 @@
-# 🚗 Auto Julius
+# 🚗 AutosJulius
 
-<p align="center">
-  <strong>Sistema Web para Gestão Automotiva</strong>
-  <br>
-  Uma aplicação desenvolvida para organizar funcionalidades de acesso e gerenciamento em um ambiente web.
-</p>
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
-</p>
+Sistema web de **revenda de veículos**: uma vitrine pública com o estoque e um painel administrativo para gerenciar carros e usuários.
 
----
+Feito com **PHP puro (PDO)** e **PostgreSQL**, sem frameworks. O código do site está na pasta `autosjulius5`.
 
-## 📋 Sumário
+## Funcionalidades
 
-- [Sobre o projeto](#-sobre-o-projeto)
-- [Objetivos](#-objetivos)
-- [Funcionalidades](#-funcionalidades)
-- [Tecnologias utilizadas](#-tecnologias-utilizadas)
-- [Arquitetura do sistema](#-arquitetura-do-sistema)
-- [Estrutura do projeto](#-estrutura-do-projeto)
-- [Banco de dados](#-banco-de-dados)
-- [Requisitos](#-requisitos)
-- [Instalação e execução](#-instalação-e-execução)
-- [Segurança](#-segurança)
-- [Melhorias futuras](#-melhorias-futuras)
-- [Autor](#-autor)
+**Público**
+- Página de apresentação (`landing.php`)
+- Estoque em cards, do veículo mais recente ao mais antigo
+- Janela de detalhes: ano, km, combustível, câmbio, preço, peças/revisões e descrição
 
----
+**Administrador (login obrigatório)**
+- Cadastrar, editar e excluir veículos
+- Cadastrar, editar e excluir usuários
+- Validação dos dados no servidor e mensagens de sucesso/erro após cada ação
 
-## 📌 Sobre o projeto
+## Segurança
 
-O **Auto Julius** é um projeto de desenvolvimento web cujo objetivo é disponibilizar uma aplicação organizada, com funcionalidades de acesso e gerenciamento de informações.
+- Senhas protegidas com `password_hash` / `password_verify`
+- Token CSRF em todos os formulários POST
+- Consultas preparadas (PDO) contra SQL Injection
+- Saída escapada com `htmlspecialchars` contra XSS
+- `session_regenerate_id` no login
+- O administrador não consegue excluir a própria conta
 
-O projeto utiliza tecnologias de desenvolvimento web e possui uma estrutura em PHP, com arquivos responsáveis pelo processamento das informações, pela comunicação com o banco de dados e pela apresentação das páginas.
+## Estrutura
 
-A proposta deste README é documentar o projeto, facilitar sua instalação e apresentar sua organização para desenvolvedores e demais pessoas interessadas em conhecer seu funcionamento.
-
-## 🎯 Objetivos
-
-Os principais objetivos do projeto são:
-
-- Desenvolver uma aplicação web organizada e funcional.
-- Aplicar conceitos de programação utilizando PHP.
-- Trabalhar com formulários e processamento de dados.
-- Implementar funcionalidades de cadastro e autenticação de usuários.
-- Organizar o acesso às funcionalidades do sistema.
-- Trabalhar com operações CRUD quando aplicáveis.
-- Integrar a aplicação a um banco de dados.
-- Aplicar boas práticas de organização e segurança.
-- Facilitar a manutenção e a evolução do código.
-
-## 🚀 Funcionalidades
-
-### 👤 Cadastro de usuários
-
-Área destinada ao registro de usuários, com processamento das informações enviadas pelos formulários.
-
-### 🔐 Login e autenticação
-
-Funcionalidade de acesso ao sistema por meio de credenciais, permitindo identificar usuários autenticados.
-
-### 🧑‍💻 Gerenciamento de usuários
-
-Área para administração dos registros de usuários, incluindo operações de consulta, cadastro e exclusão, conforme as permissões implementadas no sistema.
-
-### 🗄️ Integração com banco de dados
-
-Persistência das informações utilizadas pela aplicação, permitindo consultar e gerenciar os dados armazenados.
-
-> **Observação:** os recursos descritos nesta seção devem ser conferidos com a versão atual do código. Funcionalidades adicionais específicas da gestão automotiva devem ser documentadas após a confirmação de sua implementação.
-
-## 🛠️ Tecnologias utilizadas
-
-| Tecnologia | Finalidade |
-|---|---|
-| PHP | Processamento no servidor e regras da aplicação |
-| HTML5 | Estrutura das páginas |
-| CSS3 | Estilização e apresentação visual |
-| MySQL | Banco de dados relacional, caso seja o SGBD configurado |
-| Git e GitHub | Versionamento e hospedagem do código |
-
-## 🧩 Arquitetura do sistema
-
-A aplicação pode ser compreendida por meio das seguintes camadas:
-
-```text
-              ┌─────────────────────┐
-              │       Usuário       │
-              └──────────┬──────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │ Interface Web       │
-              │ HTML / CSS          │
-              └──────────┬──────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │ Aplicação PHP       │
-              │ Validação e regras  │
-              └──────────┬──────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │ Banco de dados      │
-              └─────────────────────┘
+```
+autosjulius5/
+├── index.php                # Estoque público
+├── landing.php              # Apresentação
+├── cadastrar_carros.php     # Novo veículo (admin)
+├── editar_carro.php         # Editar veículo (admin)
+├── database/
+│   ├── connect.php          # Conexão PDO com o PostgreSQL
+│   └── schema.sql           # Tabelas e dados iniciais
+├── includes/                # header, footer, csrf e mensagens flash
+└── login/
+    ├── login.php            # Entrar
+    ├── logout.php           # Sair
+    ├── cadastrar.php        # Novo usuário / editar usuário
+    ├── listar_logins.php    # Lista de usuários (admin)
+    ├── deletar_login.php    # Excluir usuário (admin)
+    └── gerenciar_carros.php # Painel de veículos (admin)
 ```
 
-Essa representação é conceitual e deve ser ajustada à arquitetura efetivamente utilizada no projeto.
+## Como rodar
 
-## 📁 Estrutura do projeto
+Você precisa de **PHP 8+** com a extensão `pdo_pgsql` e de **PostgreSQL 12+**.
 
-O repositório contém a pasta principal `autosjulius5`. A estrutura interna precisa ser conferida para que a documentação corresponda aos arquivos reais.
-
-Uma organização possível para uma aplicação PHP é:
-
-```text
-projeto/
-└── autosjulius5/
-    ├── admin/
-    │   └── Arquivos administrativos
-    ├── includes/
-    │   ├── conexao.php
-    │   └── functions.php
-    ├── login/
-    │   ├── login.php
-    │   └── cadastro.php
-    ├── assets/
-    │   ├── css/
-    │   ├── js/
-    │   └── img/
-    └── index.php
-```
-
-**Importante:** essa árvore é apenas uma sugestão de organização, não uma listagem confirmada dos arquivos existentes no repositório.
-
-## 🗄️ Banco de dados
-
-O banco de dados deve armazenar as informações necessárias ao funcionamento da aplicação.
-
-Para documentar corretamente essa parte, é necessário identificar:
-
-- O sistema gerenciador de banco de dados utilizado.
-- O nome do banco de dados.
-- As tabelas existentes e suas respectivas colunas.
-- Os relacionamentos entre as tabelas.
-- O arquivo SQL de criação ou importação da estrutura.
-
-As tabelas e os campos específicos devem ser documentados de acordo com o esquema real do projeto.
-
-## ⚙️ Requisitos
-
-Antes de executar o projeto, verifique os seguintes requisitos:
-
-- PHP em uma versão compatível com o código.
-- Servidor web, como Apache.
-- Banco de dados configurado, caso seja necessário.
-- Navegador atualizado.
-- Ambiente local, como XAMPP, se compatível com a configuração do projeto.
-
-## 💻 Instalação e execução
-
-### 1. Clone o repositório
+**1. Clone o repositório e entre na pasta do site**
 
 ```bash
 git clone https://github.com/julio09-dot/projeto.git
+cd projeto/autosjulius5
 ```
 
-### 2. Acesse a pasta do projeto
+**2. Crie o banco e as tabelas**
 
 ```bash
-cd projeto
+createdb -U postgres autosjulius
+psql -U postgres -d autosjulius -f database/schema.sql
 ```
 
-### 3. Configure o ambiente
+Isso cria as tabelas `usuarios` e `veiculos`, o administrador inicial e 3 veículos de exemplo.
 
-Instale e inicie o servidor local e o banco de dados, se aplicável.
+**3. Configure a conexão**
 
-Coloque os arquivos no diretório público do servidor web ou configure um Virtual Host para o projeto.
+O arquivo `database/connect.php` lê estas variáveis de ambiente:
 
-### 4. Configure o banco de dados
+| Variável | Descrição | Padrão |
+|---|---|---|
+| `DB_HOST` | Servidor do banco | `192.168.10.31` |
+| `DB_PORT` | Porta | `5432` |
+| `DB_USER` | Usuário | `postgres` |
+| `DB_PASS` | Senha | definida no arquivo |
+| `DB_NAME` | Nome do banco | `autosjulius` |
 
-Caso o sistema utilize banco de dados:
+```bash
+export DB_HOST=localhost DB_USER=postgres DB_PASS=sua_senha DB_NAME=autosjulius
+```
 
-1. Identifique o arquivo SQL disponibilizado no projeto.
-2. Importe a estrutura para o banco de dados.
-3. Configure as credenciais de conexão no arquivo apropriado.
-4. Verifique se o servidor de banco de dados está em execução.
+> ⚠️ Não publique senhas reais no GitHub. Use sempre variáveis de ambiente.
 
-### 5. Execute a aplicação
+**4. Inicie o servidor**
 
-Se a aplicação estiver preparada para o servidor embutido do PHP, entre na pasta que contém o ponto de entrada e execute:
+Rode a partir da pasta que contém o `index.php` (os links usam caminhos como `/index.php`):
 
 ```bash
 php -S localhost:8000
 ```
 
-Acesse no navegador:
+Acesse http://localhost:8000
 
-```text
-http://localhost:8000
-```
+## Acesso inicial
 
-Se o ponto de entrada estiver em uma subpasta, ajuste o diretório de execução e a URL conforme a estrutura real.
+| Campo | Valor |
+|---|---|
+| E-mail | `admin@autosjulius.com` |
+| Senha | `admin123` |
 
-## 🔒 Segurança
+**Troque a senha no primeiro acesso** (menu *Visualizar Logins* → *Editar*).
 
-Em aplicações web, é importante adotar medidas que protejam os dados e o acesso ao sistema.
+## Banco de dados
 
-Recomendações:
+**`usuarios`**: `id`, `nome`, `email` (único), `telefone`, `senha` (hash), `tipo` (`admin` ou `vendedor`), `data_cadastro`
 
-- Utilizar `password_hash()` para armazenar senhas com hash.
-- Utilizar `password_verify()` para verificar as senhas.
-- Utilizar consultas preparadas com PDO ou MySQLi.
-- Validar e sanitizar as entradas de acordo com o contexto.
-- Proteger páginas restritas com autenticação e autorização.
-- Configurar adequadamente as sessões.
-- Evitar expor credenciais do banco de dados no repositório.
-- Exibir mensagens de erro sem revelar informações internas.
+**`veiculos`**: `id`, `usuario_id` (FK para `usuarios`), `marca`, `modelo`, `ano`, `preco`, `quilometros`, `combustivel`, `cambio`, `pecas`, `descricao`, `data_cadastro`
 
-Esses itens representam boas práticas recomendadas e não significam, por si só, que todos já estejam implementados.
+## Páginas
 
-## 🔮 Melhorias futuras
+| Rota | Acesso | Função |
+|---|---|---|
+| `/landing.php` | Público | Apresentação |
+| `/index.php` | Público | Estoque |
+| `/login/login.php` | Público | Entrar |
+| `/login/gerenciar_carros.php` | Admin | Painel de veículos |
+| `/cadastrar_carros.php` | Admin | Novo veículo |
+| `/editar_carro.php?id=` | Admin | Editar veículo |
+| `/login/listar_logins.php` | Admin | Lista de usuários |
 
-Possíveis melhorias para versões futuras:
+## Reportando problemas
 
-- Aprimorar a interface e a responsividade.
-- Expandir as funcionalidades administrativas.
-- Melhorar a validação dos formulários.
-- Implementar níveis de acesso, se necessários.
-- Aprimorar o tratamento de erros.
-- Documentar as tabelas e os relacionamentos do banco de dados.
-- Adicionar testes para as principais funcionalidades.
-- Criar capturas de tela para demonstrar o funcionamento do sistema.
+Encontrou um erro? Abra uma [issue](https://github.com/julio09-dot/projeto/issues) descrevendo o que aconteceu e como reproduzir.
 
-## 👨‍💻 Autor
+## Contribuindo
 
-**Júlio César**
+Sugestões são bem-vindas. Faça um fork, crie uma branch e envie um Pull Request para a branch `main`.
 
-- GitHub: [@julio09-dot](https://github.com/julio09-dot)
-- Repositório: [Auto Julius — projeto](https://github.com/julio09-dot/projeto)
+## Próximos passos
 
----
+- [ ] Fotos dos veículos
+- [ ] Busca e filtros no estoque
+- [ ] Formulário de contato / interesse
+- [ ] Pedido de avaliação de troca
+- [ ] Status do veículo (disponível, reservado, vendido)
 
-<p align="center">
-  Desenvolvido com dedicação para aplicar e aprimorar conhecimentos em desenvolvimento web.
-</p>
+## Autor
+
+**Júlio César** — [@julio09-dot](https://github.com/julio09-dot)
